@@ -1,0 +1,96 @@
+const g = (id, title, location, date, category, fee, stage, contactName, contactEmail, invoiceId, notes = '') => ({
+  id, title, location, date, category, fee, stage, contactName, contactEmail, invoiceId: invoiceId || null, notes,
+})
+
+const inv = (id, number, gigId, desc, amount, status, issuedDate, dueDate) => ({
+  id, number, gigId, status, issuedDate, dueDate,
+  items: [{ desc, amount }],
+  depositPct: 0,
+  clause: 'Cancellation within 14 days of the event date incurs 50% of the agreed fee.',
+})
+
+export const seed = {
+  settings: {
+    artistName: 'VIV',
+    monthlyTarget: 8000,
+    currency: 'AUD',
+    theme: 'dark',
+    onboarded: false,
+    categories: [
+      { id: 'dj', label: 'DJ', color: '#7F77DD' },
+      { id: 'photo', label: 'Photo', color: '#1D9E75' },
+      { id: 'video', label: 'Video', color: '#D85A30' },
+      { id: 'web', label: 'Web', color: '#378ADD' },
+    ],
+    profile: {
+      tagline: 'DJ · Photographer · Videographer',
+      bio: 'Melbourne-based DJ and visual artist blending melodic house with analog warmth. Resident at Club Mercury, with sets at Riverside Festival and venues across VIC.',
+      photoUrl: '',
+      bookingEmail: 'vtmmrs@gmail.com',
+      socials: { instagram: 'https://instagram.com/', soundcloud: 'https://soundcloud.com/', youtube: '' },
+      embeds: ['https://soundcloud.com/example/summer-mix'],
+      gear: 'Pioneer CDJ-3000 ×2, DJM-A9, own booth monitors. Sony A7 IV kit for photo/video.',
+      rates: 'Club set (2h): from $700 · Festival: from $1,200 · Photo half-day: from $800 · Ask for web/video quotes.',
+    },
+  },
+  gigs: [
+    g('g01', 'Club Mercury', 'Collingwood', '2026-07-04', 'dj', 700, 'played', 'Sam', 'bookings@mercury.example'),
+    g('g02', 'Beans & Co brand shoot', 'Fitzroy', '2026-06-21', 'photo', 900, 'played', 'Lotte', 'lotte@beansco.example', 'i41'),
+    g('g03', 'Riverside Festival', 'Docklands', '2026-06-28', 'dj', 1200, 'played', 'Bram', 'artists@riverside.example', 'i43'),
+    g('g04', 'Studio Lex site refresh', 'Remote', '2026-06-15', 'web', 1800, 'played', 'Lex', 'lex@studiolex.example', 'i39'),
+    g('g05', 'Rooftop Sessions', 'CBD', '2026-07-03', 'dj', 550, 'played', 'Nina', 'nina@rooftop.example', 'i44'),
+    g('g06', 'Warehouse Eleven', 'Brunswick', '2026-07-18', 'dj', 800, 'confirmed', 'Kris', 'kris@w11.example'),
+    g('g07', 'Marta & Jonas wedding', 'Yarra Valley', '2026-08-01', 'photo', 1500, 'confirmed', 'Marta', 'marta@example.com'),
+    g('g08', 'Neon Nights', 'Prahran', '2026-07-25', 'dj', 650, 'lead', 'Theo', 'theo@neon.example'),
+    g('g09', 'Podcast launch video', 'Richmond', '2026-07-30', 'video', 1000, 'lead', 'Iris', 'iris@podcast.example'),
+    g('g10', 'St Kilda Beach Bar', 'St Kilda', '2026-08-14', 'dj', 600, 'lead', 'Marco', 'marco@beachbar.example'),
+    g('g11', 'Autumn product video', 'Fitzroy', '2026-04-12', 'video', 1400, 'played', 'Lotte', 'lotte@beansco.example', 'i32'),
+    g('g12', 'Club Mercury', 'Collingwood', '2026-05-09', 'dj', 700, 'played', 'Sam', 'bookings@mercury.example', 'i35'),
+    g('g13', 'Bakery site build', 'Remote', '2026-02-20', 'web', 2200, 'played', 'Piet', 'piet@bakery.example', 'i28'),
+    g('g14', 'Winter Warmer party', 'Northcote', '2026-01-17', 'dj', 650, 'played', 'Sam', 'bookings@mercury.example', 'i25'),
+    g('g15', 'NYE 2025 — Grand Hotel', 'CBD', '2025-12-31', 'dj', 1400, 'played', 'Eva', 'events@grand.example', 'i24'),
+    g('g16', 'Spring lookbook', 'South Yarra', '2025-10-05', 'photo', 1100, 'played', 'Femke', 'femke@label.example', 'i21'),
+    g('g17', 'Agency site sprint', 'Remote', '2025-07-14', 'web', 2400, 'played', 'Daan', 'daan@agency.example', 'i18'),
+    g('g18', 'Winter terrace sets', 'CBD', '2025-06-20', 'dj', 600, 'played', 'Nina', 'nina@rooftop.example', 'i16'),
+    g('g19', 'Charity gala photo', 'Southbank', '2025-04-18', 'photo', 850, 'played', 'Omar', 'omar@gala.example', 'i12'),
+    g('g20', 'Riverside Festival 2025', 'Docklands', '2025-06-27', 'dj', 1100, 'played', 'Bram', 'artists@riverside.example', 'i15'),
+  ],
+  invoices: [
+    inv('i41', '2026-041', 'g02', 'Brand shoot — half day + edits', 900, 'sent', '2026-06-22', '2026-07-06'),
+    inv('i43', '2026-043', 'g03', 'DJ set — Riverside Festival main stage', 1200, 'sent', '2026-06-29', '2026-07-13'),
+    inv('i39', '2026-039', 'g04', 'Website refresh — Studio Lex', 1800, 'paid', '2026-06-16', '2026-06-30'),
+    inv('i44', '2026-044', 'g05', 'DJ set — Rooftop Sessions', 550, 'paid', '2026-07-04', '2026-07-18'),
+    inv('i32', '2026-032', 'g11', 'Product video — shoot + edit', 1400, 'paid', '2026-04-13', '2026-04-27'),
+    inv('i35', '2026-035', 'g12', 'DJ set — Club Mercury', 700, 'paid', '2026-05-10', '2026-05-24'),
+    inv('i28', '2026-028', 'g13', 'Website build — bakery', 2200, 'paid', '2026-02-21', '2026-03-07'),
+    inv('i25', '2026-025', 'g14', 'DJ set — Winter Warmer', 650, 'paid', '2026-01-18', '2026-02-01'),
+    inv('i24', '2025-024', 'g15', 'NYE DJ set — Grand Hotel', 1400, 'paid', '2026-01-02', '2026-01-16'),
+    inv('i21', '2025-021', 'g16', 'Lookbook shoot', 1100, 'paid', '2025-10-06', '2025-10-20'),
+    inv('i18', '2025-018', 'g17', 'Site sprint — agency', 2400, 'paid', '2025-07-15', '2025-07-29'),
+    inv('i16', '2025-016', 'g18', 'Terrace DJ sets — June', 600, 'paid', '2025-06-21', '2025-07-05'),
+    inv('i12', '2025-012', 'g19', 'Event photography — gala', 850, 'paid', '2025-04-19', '2025-05-03'),
+    inv('i15', '2025-015', 'g20', 'DJ set — Riverside Festival', 1100, 'paid', '2025-06-28', '2025-07-12'),
+  ],
+  contacts: [
+    {
+      id: 'c01', name: 'Sam Okafor', role: 'Booker', venue: 'Club Mercury', city: 'Collingwood',
+      email: 'bookings@mercury.example', phone: '', photoUrl: '', instagram: 'https://instagram.com/',
+      notes: 'Prefers WhatsApp. Pays within a week. Books 2 months ahead.',
+    },
+    {
+      id: 'c02', name: 'Bram Visser', role: 'Talent buyer', venue: 'Riverside Festival', city: 'Docklands',
+      email: 'artists@riverside.example', phone: '', photoUrl: '', instagram: '',
+      notes: 'Lineup locks in March. Wants EPK + live video link.',
+    },
+    {
+      id: 'c03', name: 'Nina Halim', role: 'Venue manager', venue: 'Rooftop Sessions', city: 'CBD',
+      email: 'nina@rooftop.example', phone: '', photoUrl: '', instagram: '',
+      notes: 'Summer season only. Backline on site, bring USBs.',
+    },
+    {
+      id: 'c04', name: 'Lotte de Wit', role: 'Marketing lead', venue: 'Beans & Co', city: 'Fitzroy',
+      email: 'lotte@beansco.example', phone: '', photoUrl: '', instagram: '',
+      notes: 'Repeat photo/video client. Quarterly campaigns.',
+    },
+  ],
+}

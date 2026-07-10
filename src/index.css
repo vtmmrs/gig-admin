@@ -1,0 +1,162 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0E0E13;
+  --card: #17171C;
+  --card-2: #1E1E26;
+  --line: #2E2E38;
+  --text: #E8E8EF;
+  --muted: #8A8A99;
+  --accent: #7F77DD;
+  --accent-light: #AFA9EC;
+  --accent-contrast: #0E0E13;
+  --accent-deep: #3C3489;
+  --on-accent-deep: #CECBF6;
+  --warn: #EF9F27;
+  --warn-fg: #FAC775;
+  --warn-bg: rgba(239, 159, 39, 0.2);
+  --ok-fg: #5DCAA5;
+  --ok-bg: rgba(93, 202, 165, 0.2);
+  --danger-fg: #F09595;
+  --danger-bg: rgba(226, 75, 74, 0.22);
+  --tabbar-bg: rgba(14, 14, 19, 0.96);
+  --card-border: transparent;
+}
+
+[data-theme="light"] {
+  --bg: #F4F4F7;
+  --card: #FFFFFF;
+  --card-2: #FFFFFF;
+  --line: #DCDCE4;
+  --text: #1B1B22;
+  --muted: #63636F;
+  --accent: #5A50C7;
+  --accent-light: #534AB7;
+  --accent-contrast: #FFFFFF;
+  --accent-deep: #C7C2F0;
+  --on-accent-deep: #3C3489;
+  --warn: #EF9F27;
+  --warn-fg: #8A5A0B;
+  --warn-bg: rgba(239, 159, 39, 0.18);
+  --ok-fg: #0F6E56;
+  --ok-bg: rgba(29, 158, 117, 0.15);
+  --danger-fg: #A32D2D;
+  --danger-bg: rgba(226, 75, 74, 0.12);
+  --tabbar-bg: rgba(244, 244, 247, 0.96);
+  --card-border: #E7E7EE;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.card { background: var(--card-2); border-radius: 12px; border: 1px solid var(--card-border); }
+.muted { color: var(--muted); }
+.accent { color: var(--accent-light); }
+
+.label {
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.chip {
+  font-size: 10px;
+  padding: 1px 8px;
+  border-radius: 8px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.btn {
+  background: var(--card-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 13px;
+  color: var(--text);
+  min-height: 40px;
+}
+.btn:active { transform: scale(0.98); }
+.btn-accent {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 500;
+}
+.btn-ghost { background: transparent; border-color: var(--line); }
+
+.input {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 14px;
+  color: var(--text);
+  width: 100%;
+  min-height: 42px;
+}
+.input:focus { outline: none; border-color: var(--accent); }
+select.input { appearance: none; }
+textarea.input { min-height: 80px; }
+
+.row { background: var(--card-2); border-radius: 10px; padding: 10px 12px; border: 1px solid var(--card-border); }
+.row-warn { border-left: 3px solid var(--warn); border-radius: 0 10px 10px 0; }
+
+.tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--tabbar-bg);
+  border-top: 1px solid var(--line);
+  backdrop-filter: blur(8px);
+  z-index: 40;
+}
+.tabbar a {
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 0 max(10px, env(safe-area-inset-bottom));
+  font-size: 10px;
+  flex: 1;
+  min-height: 44px;
+}
+.tabbar a.active { color: var(--accent-light); }
+
+.bar-track { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 6px; background: var(--accent); border-radius: 3px; }
+
+.acc-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--card-2);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  text-align: left;
+}
+.acc-chevron { transition: transform 0.15s ease; color: var(--muted); }
+.acc-chevron.open { transform: rotate(90deg); }
+.count-badge {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  min-width: 20px;
+  text-align: center;
+  padding: 1px 7px;
+}
+
+::-webkit-scrollbar { height: 6px; width: 6px; }
+::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
