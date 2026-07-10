@@ -4,6 +4,8 @@ export function buildEpk(state) {
   const p = state.settings.profile
   return {
     name: state.settings.artistName,
+    photoUrl: p.photoUrl || '',
+    gallery: p.gallery || [],
     tagline: p.tagline,
     bio: p.bio,
     bookingEmail: p.bookingEmail,
@@ -25,6 +27,8 @@ export function buildEpk(state) {
 export function profileRowToEpk(row) {
   return {
     name: row.name,
+    photoUrl: row.photo_url || '',
+    gallery: row.gallery || [],
     tagline: row.tagline,
     bio: row.bio,
     bookingEmail: row.booking_email,
@@ -41,6 +45,8 @@ export function epkToProfileRow(userId, slug, epk) {
     user_id: userId,
     slug,
     name: epk.name,
+    photo_url: epk.photoUrl,
+    gallery: epk.gallery,
     tagline: epk.tagline,
     bio: epk.bio,
     booking_email: epk.bookingEmail,

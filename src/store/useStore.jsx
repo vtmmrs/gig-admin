@@ -12,6 +12,8 @@ function migrate(s) {
   )
   merged.contacts = s.contacts || seed.contacts
   merged.settings = { ...seed.settings, ...s.settings }
+  merged.settings.profile = { ...seed.settings.profile, ...(s.settings ? s.settings.profile : {}) }
+  if (!merged.settings.profile.gallery) merged.settings.profile.gallery = []
   if (!merged.settings.theme) merged.settings.theme = 'dark'
   if (!merged.settings.currency || merged.settings.currency === 'EUR') merged.settings.currency = 'AUD'
   if (merged.settings.onboarded === undefined) merged.settings.onboarded = true

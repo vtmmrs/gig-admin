@@ -26,6 +26,7 @@ export const seed = {
       tagline: 'DJ · Photographer · Videographer',
       bio: 'Melbourne-based DJ and visual artist blending melodic house with analog warmth. Resident at Club Mercury, with sets at Riverside Festival and venues across VIC.',
       photoUrl: '',
+      gallery: [],
       bookingEmail: 'vtmmrs@gmail.com',
       socials: { instagram: 'https://instagram.com/', soundcloud: 'https://soundcloud.com/', youtube: '' },
       embeds: ['https://soundcloud.com/example/summer-mix'],

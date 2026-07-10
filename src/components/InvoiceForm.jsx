@@ -54,6 +54,10 @@ export default function InvoiceForm({ gig, invoice, onClose }) {
       ))}
       <button type="button" className="btn btn-ghost w-full mb-3 text-xs" onClick={addItem}>+ add line</button>
 
+      <Field label="Invoice number (yours to customise)">
+        <input className="input" value={form.number}
+          onChange={(e) => setForm({ ...form, number: e.target.value })} />
+      </Field>
       <div className="grid grid-cols-2 gap-3">
         <Field label="Issued">
           <input className="input" type="date" value={form.issuedDate} onChange={(e) => setForm({ ...form, issuedDate: e.target.value })} />

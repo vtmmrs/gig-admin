@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useStore } from '../store/useStore'
 import { uid, encodeShare, slugify } from '../lib/utils'
 import { buildEpk } from '../lib/epk'
+import { uploadPhoto } from '../lib/photos'
 import { useAuth } from '../components/CloudSync'
 import { Field } from '../components/Shared'
 import EpkView from '../components/EpkView'
@@ -58,6 +59,93 @@ function AccountCard() {
         {window.location.href.split('#')[0]}#/u/{state.settings.slug || slugify(state.settings.artistName)}
       </p>
       <button className="btn btn-ghost w-full text-xs" onClick={signOut}>Sign out</button>
+    </div>
+  )
+}
+
+function PhotoManager() {
+  const { state, dispatch } = useStore()
+  const { session } = useAuth()
+  const p = state.settings.profile
+  const gallery = p.gallery || []
+  const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState('')
+
+  async function upload(e, target) {
+    const file = e.target.files[0]
+    e.target.value = ''
+    if (!file) return
+    setBusy(true); setErr('')
+    try {
+      const url = await uploadPhoto(file, session?.user?.id)
+      if (target === 'profile') {
+        dispatch({ type: 'updateProfile', patch: { photoUrl: url } })
+      } else {
+        dispatch({ type: 'updateProfile', patch: { gallery: [...gallery, url].slice(0, 6) } })
+      }
+    } catch (ex) {
+      setErr(ex.message)
+    }
+    setBusy(false)
+  }
+
+  if (!session) {
+    return (
+      <div className="card p-4 mb-3">
+        <p className="label mb-2">Photos</p>
+        <p className="muted text-xs">Sign in below to upload a profile photo and EPK gallery. (You can also paste an image URL:)</p>
+        <input className="input mt-2" value={p.photoUrl || ''} placeholder="https://…/photo.jpg"
+          onChange={(e) => dispatch({ type: 'updateProfile', patch: { photoUrl: e.target.value } })} />
+      </div>
+    )
+  }
+
+  return (
+    <div className="card p-4 mb-3">
+      <p className="label mb-2">Photos</p>
+      <div className="flex items-center gap-3 mb-3">
+        {p.photoUrl ? (
+          <img src={p.photoUrl} alt="Profile" className="rounded-full" style={{ width: 56, height: 56, objectFit: 'cover' }} />
+        ) : (
+          <div className="rounded-full flex items-center justify-center"
+            style={{ width: 56, height: 56, background: 'var(--accent-deep)', color: 'var(--on-accent-deep)' }}>
+            {state.settings.artistName.slice(0, 2).toUpperCase()}
+          </div>
+        )}
+        <label className="btn btn-ghost text-xs cursor-pointer">
+          {p.photoUrl ? 'Replace profile photo' : 'Upload profile photo'}
+          <input type="file" accept="image/*" hidden onChange={(e) => upload(e, 'profile')} />
+        </label>
+        {p.photoUrl && (
+          <button className="muted text-xs" onClick={() => dispatch({ type: 'updateProfile', patch: { photoUrl: '' } })}>
+            remove
+          </button>
+        )}
+      </div>
+
+      <p className="muted text-xs mb-2">EPK gallery — live shots with a crowd work best ({gallery.length}/6)</p>
+      <div className="grid grid-cols-3 gap-2 mb-2">
+        {gallery.map((url, i) => (
+          <div key={i} className="relative">
+            <img src={url} alt={`Gallery ${i + 1}`} className="rounded-lg w-full" style={{ aspectRatio: '1', objectFit: 'cover' }} />
+            <button className="absolute top-1 right-1 rounded-full text-xs"
+              style={{ background: 'rgba(0,0,0,0.65)', color: '#fff', width: 22, height: 22 }}
+              aria-label="Remove photo"
+              onClick={() => dispatch({ type: 'updateProfile', patch: { gallery: gallery.filter((_, j) => j !== i) } })}>
+              ×
+            </button>
+          </div>
+        ))}
+        {gallery.length < 6 && (
+          <label className="rounded-lg flex items-center justify-center cursor-pointer"
+            style={{ aspectRatio: '1', border: '1px dashed var(--line)', color: 'var(--muted)' }}>
+            +
+            <input type="file" accept="image/*" hidden onChange={(e) => upload(e, 'gallery')} />
+          </label>
+        )}
+      </div>
+      {busy && <p className="muted text-xs">Uploading…</p>}
+      {err && <p className="text-xs" style={{ color: 'var(--danger-fg)' }}>{err}</p>}
     </div>
   )
 }
@@ -142,6 +230,7 @@ export default function Profile() {
             <input className="input" value={state.settings.artistName}
               onChange={(e) => dispatch({ type: 'updateSettings', patch: { artistName: e.target.value } })} />
           </Field>
+          <PhotoManager />
           <Field label="Tagline">
             <input className="input" value={p.tagline} onChange={set('tagline')} />
           </Field>

@@ -22,15 +22,21 @@ function embedFor(url) {
 }
 
 export default function EpkView({ epk, footer }) {
-  const { name, tagline, bio, bookingEmail, embed, gear, rates, socials = {}, upcoming = [] } = epk
+  const { name, photoUrl, gallery = [], tagline, bio, bookingEmail, embed, gear, rates, socials = {}, upcoming = [] } = epk
 
   return (
     <div>
       <div className="card p-5 mb-4 text-center" style={{ border: '1px solid var(--accent-deep)' }}>
-        <div className="mx-auto mb-3 flex items-center justify-center rounded-full"
-          style={{ width: 72, height: 72, background: 'var(--accent-deep)', color: 'var(--on-accent-deep)', fontSize: 24, fontWeight: 500 }}>
-          {(name || '??').slice(0, 2).toUpperCase()}
-        </div>
+        {photoUrl ? (
+          <img src={photoUrl} alt={name}
+            className="mx-auto mb-3 rounded-full"
+            style={{ width: 96, height: 96, objectFit: 'cover', border: '2px solid var(--accent-deep)' }} />
+        ) : (
+          <div className="mx-auto mb-3 flex items-center justify-center rounded-full"
+            style={{ width: 72, height: 72, background: 'var(--accent-deep)', color: 'var(--on-accent-deep)', fontSize: 24, fontWeight: 500 }}>
+            {(name || '??').slice(0, 2).toUpperCase()}
+          </div>
+        )}
         <h2 className="text-lg font-medium">{name}</h2>
         <p className="muted text-xs mb-3">{tagline}</p>
         {bookingEmail && (
@@ -52,6 +58,19 @@ export default function EpkView({ epk, footer }) {
         <div className="card p-2 mb-4">
           <iframe title="Music player" src={embedFor(embed)} width="100%" height="140"
             frameBorder="0" allow="autoplay; encrypted-media" style={{ borderRadius: 8 }} />
+        </div>
+      )}
+
+      {gallery.length > 0 && (
+        <div className="card p-3 mb-4">
+          <p className="label mb-2">Photos</p>
+          <div className="grid grid-cols-3 gap-2">
+            {gallery.map((url, i) => (
+              <img key={i} src={url} alt={`${name} — photo ${i + 1}`}
+                className="rounded-lg w-full"
+                style={{ aspectRatio: '1', objectFit: 'cover' }} loading="lazy" />
+            ))}
+          </div>
         </div>
       )}
 
